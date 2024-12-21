@@ -190,3 +190,62 @@ Example Response
     "email": "john.doe@example.com"
   }
 }
+
+POST /login
+This endpoint logs in an existing user.
+
+URL: /login
+Method: POST
+Validation:
+email: Must be a valid email.
+Request Body:
+
+{
+  "email": "john.doe@example.com",
+  "password": "password123"
+}
+
+Response:
+Success: 200 OK
+
+{
+  "token": "jwt_token",
+  "user": {
+    "_id": "user_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  }
+}
+
+Validation Error: 400 Bad Request
+
+{
+  "errors": [
+    {
+      "msg": "Email is not valid",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+
+Authentication Error: 401 Unauthorized
+
+{
+  "message": "Invalid credentials"
+}
+
+GET /logout
+This endpoint logs out the current user.
+
+URL: /logout
+Method: GET
+Response:
+Success: 200 OK
+
+{
+  "message": "User logged out successfully"
+}
