@@ -1,251 +1,353 @@
-User Routes - Backend API
+# User Routes - Backend API
 
-This document provides an overview of the user routes available in your backend. These routes are designed for user registration and authentication, utilizing express, express-validator, and jsonwebtoken for request handling, validation, and token generation.
-Table of Contents
+This documentation provides an overview of the user routes available in the backend API. These routes enable user registration, login, and logout functionality, leveraging modern tools like **Express**, **express-validator**, **jsonwebtoken**, and **bcryptjs**.
 
-    Installation
-    Dependencies
-    Available Routes
-        User Registration
-    Example Requests
-        Register User
+---
 
-Installation
+## Table of Contents
 
-    Clone the repository:
+1. [Installation](#installation)
+2. [Dependencies](#dependencies)
+3. [Available Routes](#available-routes)
+   - [User Registration](#user-registration)
+   - [User Login](#user-login)
+   - [User Logout](#user-logout)
+4. [Example Requests](#example-requests)
+   - [Register User](#register-user)
+   - [Login User](#login-user)
+5. [Notes](#notes)
+6. [License](#license)
 
-git clone <repository-url>
-cd <project-directory>
+---
 
-Install dependencies:
+## Installation
 
-npm install
+1. **Clone the repository:**
 
-Set up environment variables in a .env file:
+   ```bash
+   git clone <repository-url>
+   cd <project-directory>
+   ```
 
-MONGO_URI=<your-mongodb-uri>
-SECRET_KEY=<your-jwt-secret-key>
+2. **Install dependencies:**
 
-Start the server:
+   ```bash
+   npm install
+   ```
 
-    npm start
+3. **Set up environment variables in a `.env` file:**
 
-Dependencies
+   ```plaintext
+   MONGO_URI=<your-mongodb-uri>
+   SECRET_KEY=<your-jwt-secret-key>
+   ```
 
-The following dependencies are used in the user routes:
+4. **Start the server:**
 
-    express: Web framework for handling routing.
-    express-validator: Middleware for validating and sanitizing user input.
-    jsonwebtoken: For generating and verifying authentication tokens.
-    bcryptjs: For hashing and comparing passwords.
+   ```bash
+   npm start
+   ```
 
-Install them using:
+---
 
+## Dependencies
+
+The following dependencies are used:
+
+- **express**: Web framework for handling routing.
+- **express-validator**: Middleware for input validation and sanitization.
+- **jsonwebtoken**: For generating and verifying JWTs (JSON Web Tokens).
+- **bcryptjs**: For hashing and verifying passwords.
+
+Install these dependencies using:
+
+```bash
 npm install express express-validator jsonwebtoken bcryptjs
+```
 
-Available Routes
+---
 
-1. User Registration
+## Available Routes
 
-   Endpoint: POST /users/register
-   Description: Registers a new user after validating input fields and encrypting the password.
-   Validation Rules:
-   email: Must be a valid email.
-   fullname.firstname: Must be at least 3 characters long.
-   password: Must be at least 6 characters long.
-   Controller Function: registerUser
+### 1. **User Registration**
 
-Example Requests
-Register User
+- **Endpoint:** `POST /users/register`
+- **Description:** Registers a new user by validating input fields and encrypting the password.
+- **Validation Rules:**
+  - `email`: Must be a valid email.
+  - `fullname.firstname`: Must be at least 3 characters long.
+  - `password`: Must be at least 6 characters long.
 
-Endpoint: POST /users/register
+---
 
-Request Body:
+### 2. **User Login**
+
+- **Endpoint:** `POST /users/login`
+- **Description:** Logs in an existing user by verifying credentials and generating a JWT.
+- **Validation Rules:**
+  - `email`: Must be a valid email.
+
+---
+
+### 3. **User Logout**
+
+- **Endpoint:** `GET /users/logout`
+- **Description:** Logs out the current user and invalidates the session.
+
+---
+
+## Example Requests
+
+### Register User
+
+**Request:**
+
+```json
+POST /users/register
+Content-Type: application/json
 
 {
-"fullname": {
-"firstname": "John",
-"lastname": "Doe"
-},
-"email": "john.doe@example.com",
-"password": "securepassword123"
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "securepassword123"
 }
+```
 
-Response:
+**Response:**
 
-{
-"token": "your-generated-jwt-token",
-"user": {
-"\_id": "60d21b4667d0d8992e610c85",
-"fullname": {
-"firstname": "John",
-"lastname": "Doe"
-},
-"email": "john.doe@example.com"
-}
-}
+- **Success (201):**
 
-Validation Errors:
+  ```json
+  {
+    "token": "your-generated-jwt-token",
+    "user": {
+      "_id": "60d21b4667d0d8992e610c85",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
 
-If validation fails, the response might look like this:
+- **Validation Errors (400):**
 
-{
-"errors": [
-{
-"msg": "Email is not valid",
-"param": "email",
-"location": "body"
-},
-{
-"msg": "First name must be at least 3 characters long",
-"param": "fullname.firstname",
-"location": "body"
-},
-{
-"msg": "Password must be at least 6 characters long",
-"param": "password",
-"location": "body"
-}
-]
-}
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Email is not valid",
+        "param": "email",
+        "location": "body"
+      },
+      {
+        "msg": "First name must be at least 3 characters long",
+        "param": "fullname.firstname",
+        "location": "body"
+      },
+      {
+        "msg": "Password must be at least 6 characters long",
+        "param": "password",
+        "location": "body"
+      }
+    ]
+  }
+  ```
 
-Notes
+---
 
-    Password Hashing: Passwords are hashed before being saved to the database using bcryptjs.
-    Token Generation: A JWT (JSON Web Token) is generated upon successful registration for user authentication.
-    Error Handling: Input validation errors are returned with appropriate error messages to help identify issues.
+### Login User
 
-License
+**Request:**
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+```json
+POST /users/login
+Content-Type: application/json
 
-
-POST /login
-This endpoint logs in an existing user.
-
-URL: /login
-Method: POST
-Validation:
-email: Must be a valid email.
-Request Body:
 {
   "email": "john.doe@example.com",
   "password": "password123"
 }
+```
 
-Response:
-Success: 200 OK
+**Response:**
+
+- **Success (200):**
+
+  ```json
+  {
+    "token": "jwt_token",
+    "user": {
+      "_id": "user_id",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+    }
+  }
+  ```
+
+- **Validation Errors (400):**
+
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Email is not valid",
+        "param": "email",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **Authentication Error (401):**
+
+  ```json
+  {
+    "message": "Invalid credentials"
+  }
+  ```
+
+---
+
+### Logout User
+
+**Request:**
+
+```json
+GET /users/logout
+```
+
+**Response:**
+
+- **Success (200):**
+
+  ```json
+  {
+    "message": "User logged out successfully"
+  }
+  ```
+
+---
+
+## Notes
+
+1. **Password Hashing:** User passwords are securely hashed using **bcryptjs** before being saved to the database.
+2. **Token Generation:** A JWT is generated upon successful registration and login for authentication purposes.
+3. **Error Handling:** All input validation errors and authentication failures return appropriate HTTP status codes with descriptive error messages.
+
+---
+
+### Register Captain
+
+**Endpoint**: `POST /captains/register`  
+**Description**: Registers a new captain after validating input fields, hashing the password, and saving the data to the database.
+
+#### Request
+
+**Headers**:
+
+```plaintext
+Content-Type: application/json
+```
+
+**Body**:
+
+```json
 {
-  "token": "jwt_token",
-  "user": {
-    "_id": "user_id",
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com"
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "securepassword123",
+  "vehicle": {
+    "color": "red",
+    "plate": "ABC1234",
+    "capacity": 4,
+    "vehicleType": "car"
   }
 }
+```
 
-Validation Error: 400 Bad Request
+#### Validation Rules
 
+- `fullname.firstname`: Must be at least 3 characters long.
+- `fullname.lastname`: Must be at least 3 characters long.
+- `email`: Must be a valid email address.
+- `password`: Must not be empty.
+- `vehicle.color`: Must be at least 3 characters long.
+- `vehicle.plate`: Must be at least 3 characters long.
+- `vehicle.capacity`: Must be a number greater than or equal to 1.
+- `vehicle.vehicleType`: Must be one of the following: `car`, `motorcycle`, `auto`.
+
+#### Responses
+
+**Success (201 Created)**:
+
+```json
 {
-  "errors": [
-    {
-      "msg": "Email is not valid",
-      "param": "email",
-      "location": "body"
-    }
-  ]
-}
-
-Authentication Error: 401 Unauthorized
-{
-  "message": "Invalid credentials"
-}
-
-Example Request
-
-curl -X POST http://localhost:3000/register \
-  -H "Content-Type: application/json" \
-  -d '{
+  "captain": {
+    "_id": "64b6f99fc1234567890abcde",
     "fullname": {
       "firstname": "John",
       "lastname": "Doe"
     },
     "email": "john.doe@example.com",
-    "password": "password123"
-  }'
-
-Example Response
-
-{
-  "token": "jwt_token",
-  "user": {
-    "_id": "user_id",
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com"
-  }
+    "status": "inactive",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  },
+  "token": "your-generated-jwt-token"
 }
+```
 
-POST /login
-This endpoint logs in an existing user.
+**Validation Errors (400 Bad Request)**:
 
-URL: /login
-Method: POST
-Validation:
-email: Must be a valid email.
-Request Body:
-
-{
-  "email": "john.doe@example.com",
-  "password": "password123"
-}
-
-Response:
-Success: 200 OK
-
-{
-  "token": "jwt_token",
-  "user": {
-    "_id": "user_id",
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "john.doe@example.com"
-  }
-}
-
-Validation Error: 400 Bad Request
-
+```json
 {
   "errors": [
+    { "msg": "Email is not valid", "param": "email", "location": "body" },
     {
-      "msg": "Email is not valid",
-      "param": "email",
+      "msg": "First name must be at least 3 characters long",
+      "param": "fullname.firstname",
+      "location": "body"
+    },
+    {
+      "msg": "Password must not be empty",
+      "param": "password",
       "location": "body"
     }
   ]
 }
+```
 
-Authentication Error: 401 Unauthorized
+**Conflict (400 Conflict)**:
 
+```json
 {
-  "message": "Invalid credentials"
+  "message": "A captain with this email already exist"
 }
+```
 
-GET /logout
-This endpoint logs out the current user.
+#### Notes
 
-URL: /logout
-Method: GET
-Response:
-Success: 200 OK
+- **Password Hashing**: Passwords are hashed using `bcryptjs` before saving them in the database.
+- **Token Generation**: A JWT token is generated upon successful registration for authentication purposes.
+- **Error Handling**: Validation errors and business logic errors are returned with appropriate status codes and descriptive messages.
 
-{
-  "message": "User logged out successfully"
-}
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---

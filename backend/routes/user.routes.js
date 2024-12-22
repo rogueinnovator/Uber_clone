@@ -4,6 +4,7 @@ import { loginUser, logOutUser, registerUser } from "../controllers/user.control
 import { authUser } from "../middlewares/auth.middleware.js";
 import { getUserProfile } from "../controllers/user.controller.js";
 const router = express.Router();
+//1.REGISTER ROUTE
 router.post(
   "/register",
   [
@@ -17,11 +18,14 @@ router.post(
   ],
   registerUser
 );
+//2.LOGIN ROUTE
 router.post(
   "/login",
   [body("email").isEmail().withMessage("Email is not valid")],
   loginUser
 );
+//3.GET USER PROFILE ROUTE
 router.get("/profile", authUser, getUserProfile);
+//4.LOGOUT ROUTE
 router.get("/logout", logOutUser)
 export default router;
