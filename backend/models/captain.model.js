@@ -64,16 +64,16 @@ const captainSchema = new mongoose.Schema({
             type: Number,
         }
     }
-})
-captainSchema.methods.generateAuthToken = async function () {
-    const token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY, { expiresIn: "24h" })
-    return token
-}
+});
+captainSchema.methods.generateAuthToken = async function () {//(this method witll perform async  operation)
+    const token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY, { expiresIn: "24h" });
+    return token;
+};
 captainSchema.methods.comparePassword = async function (password) {
-    return await bcrypt.compare(password, this.password)
-}
+    return await bcrypt.compare(password, this.password);
+};
 captainSchema.statics.hashPassword = async function (password) {
-    return await bcrypt.hash(password, 10)
-}
-export const captainModel = mongoose.model("Captain", captainSchema)//(the Captin is the name of the collection in the database)
+    return await bcrypt.hash(password, 10);
+};
+export const captainModel = mongoose.model("Captain", captainSchema);//(the Captin is the name of the collection in the database)
 //instnce methods are only invoked on the specific instance of a class while the static methods belong to the whole class

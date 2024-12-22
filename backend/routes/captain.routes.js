@@ -1,7 +1,8 @@
 import express from 'express';
 import { body } from 'express-validator';
-import { registerCaptain } from '../controllers/captain.controller.js';
-const router = express.Router()
+import { getCaptainProfile, logInCaptain, logOutCaptain, registerCaptain } from '../controllers/captain.controller.js';
+import { authCaptain } from '../middlewares/auth.middleware.js';
+const router = express.Router();
 //1.ROUTE TO REGISTER CAPTAIN
 router.post("/register",
     [body("email").isEmail().withMessage("Email is not valid"),
@@ -14,5 +15,12 @@ router.post("/register",
     body("vehicle.vehicleType").isIn(["car", "motercycle", "auto"]).withMessage("Invalid option"),
     ]
     , registerCaptain
-)
+);
+router.post("/login",
+    body("email").isEmail().withMessage("Enter a valid email"),
+    body("password").isLength({ min: 3 }).withMessage("The pass should be min 3 char "),
+    logInCaptain
+);
+router.get("/profile", authCaptain, getCaptainProfile);
+router.get("/logout", logOutCaptain);
 export default router;

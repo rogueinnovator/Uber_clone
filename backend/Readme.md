@@ -340,6 +340,100 @@ Content-Type: application/json
 }
 ```
 
+## Login Captain
+
+**Endpoint:** `POST /captains/login`  
+**Description:** Logs in an existing captain by verifying credentials and generating a JWT.
+
+### Request
+
+**Headers:**
+
+```
+Content-Type: application/json
+```
+
+**Body:**
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securepassword123"
+}
+```
+
+### Responses
+
+#### Success (200 OK):
+
+```json
+{
+  "token": "your-generated-jwt-token",
+  "captain": {
+    "_id": "64b6f99fc1234567890abcde",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "status": "active",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+#### Validation Errors (400 Bad Request):
+
+```json
+{
+  "errors": [
+    { "msg": "Email is not valid", "param": "email", "location": "body" },
+    {
+      "msg": "Password must not be empty",
+      "param": "password",
+      "location": "body"
+    }
+  ]
+}
+```
+
+#### Authentication Error (401 Unauthorized):
+
+```json
+{
+  "message": "Invalid credentials"
+}
+```
+
+---
+
+## Logout Captain
+
+**Endpoint:** `GET /captains/logout`  
+**Description:** Logs out the current captain and invalidates the session.
+
+### Request
+
+**Headers:**
+
+```
+Authorization: Bearer <your-jwt-token>
+```
+
+### Responses
+
+#### Success (200 OK):
+
+```json
+{
+  "message": "Captain logged out successfully"
+}
+
 #### Notes
 
 - **Password Hashing**: Passwords are hashed using `bcryptjs` before saving them in the database.
@@ -351,3 +445,4 @@ Content-Type: application/json
 This project is licensed under the [MIT License](LICENSE).
 
 ---
+```
