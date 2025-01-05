@@ -23,4 +23,4 @@ router.post("/login",
 );
 router.get("/profile", authCaptain, getCaptainProfile);
 router.get("/logout", logOutCaptain);
-export default router;
+export default router;  

@@ -11,7 +11,9 @@ export const registerUser = async (req, res) => {
   const { fullname, email, password } = req.body;
   const isUserExist = await userModel.findOne({ email });
   if (isUserExist) {
-    return res.status(400).json({ message: "A user with this email already exist" });
+    return res
+      .status(400)
+      .json({ message: "A user with this email already exist" });
   }
   const hashPassword = await userModel.hashPassword(password);
   const token = user.generateAuthToken();
@@ -31,20 +33,17 @@ export const loginUser = async (req, res) => {
   }
   const { email, password } = req.body;
   const user = await userModel.findOne({ email }).select("+password");
-  // if (!user) {
-  //   return res.status(401).json({ message: "Invalid credentials" });
-  // }
   const isMatch = user.comparePassword(password);
   if (!isMatch || !user) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
-  res.cookie("token", token);//when working in the production enviroment we have to set the httponly to true because it will make the cookie inaccessible to javascript on the client side which will prevent the cross site scripting attack 
+  res.cookie("token", token); //when working in the production enviroment we have to set the httponly to true because it will make the cookie inaccessible to javascript on the client side which will prevent the cross site scripting attack
   const token = await user.generateAuthToken();
   return res.status(200).json({ token, user });
 };
 //3.GET USER PROFILE CONTROLLER
 export const getUserProfile = async (req, res) => {
-  res.status(200).json({user:req.user});
+  res.status(200).json({ user: req.user });
 };
 //4.LOGOUT CONTROLLER
 export const logOutUser = async (req, res) => {
