@@ -1,24 +1,27 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "../apis/user.api";
+import { useUserContext } from "../context/UserContext";
+export interface SignUpUser {
+  fullName: object;
+  email: string;
+  password: string;
+}
 const UserSignUp = () => {
-  interface Captain {
-    firstName: string;
-    lastName: string;
-    password: string;
-  }
+  const navigate = useNavigate();
+  const { user, setUser } = useUserContext;
   const [firstName, setFirstName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [userData, setUserData] = useState<Captain | null>(null);
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUserData({
-      firstName: firstName,
-      lastName: lastName,
-      password: password,
-    });
-    console.log(userData);
+    const fullName = { firstName: firstName, lastName: lastName };
+    const userData: SignUpUser = { fullName, email, password };
+    const user = await signUp(userData);
+    localStorage.setItem("token", user.token);
+    navigate("/home");
     //this allow access to the form element and in some cases edit the form element
   };
   return (

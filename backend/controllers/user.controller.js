@@ -8,7 +8,8 @@ export const registerUser = async (req, res) => {
   if (!errors.isEmpty) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { fullname, email, password } = req.body;
+  const { fullName, email, password } = req.body;
+  console.log(fullName);
   const isUserExist = await userModel.findOne({ email });
   if (isUserExist) {
     return res
@@ -16,13 +17,14 @@ export const registerUser = async (req, res) => {
       .json({ message: "A user with this email already exist" });
   }
   const hashPassword = await userModel.hashPassword(password);
-  const token = user.generateAuthToken();
+
   const user = await createUser({
-    firstname: fullname.firstname,
-    lastname: fullname.lastname,
+    firstname: fullName.firstName,
+    lastname: fullName.lastName,
     email,
     password: hashPassword,
   });
+  const token = user.generateAuthToken();
   res.status(201).json({ token, user });
 };
 //2.LOGIN CONTROLLER
@@ -33,21 +35,23 @@ export const loginUser = async (req, res) => {
   }
   const { email, password } = req.body;
   const user = await userModel.findOne({ email }).select("+password");
-  const isMatch = user.comparePassword(password);
-  if (!isMatch || !user) {
+  if (!user || !(await user.comparePassword(password))) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
-  res.cookie("token", token); //when working in the production enviroment we have to set the httponly to true because it will make the cookie inaccessible to javascript on the client side which will prevent the cross site scripting attack
   const token = await user.generateAuthToken();
-  return res.status(200).json({ token, user });
+  const { password: _, ...userWithOutPass } = user.toObject();
+  return res.status(200).json({
+    token, user: userWithOutPass
+  });
 };
 //3.GET USER PROFILE CONTROLLER
+
 export const getUserProfile = async (req, res) => {
   res.status(200).json({ user: req.user });
 };
 //4.LOGOUT CONTROLLER
 export const logOutUser = async (req, res) => {
-  const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
+  const token = req.cookies?.token || req.headers.Authorization?.split(" ")[1];
   res.clearCookie("token");
   await blackListTokenModel.create({ token });
   res.status(200).json({ message: "User logged out successfully" });

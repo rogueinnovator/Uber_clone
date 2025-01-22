@@ -1,24 +1,33 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { captainSignUp } from "../apis/captain.api";
+export interface CaptainSignUp {
+  fullName: object;
+  password: string;
+  email: string;
+  vehicle: object;
+}
 const CaptainSignup = () => {
-  interface Captain {
-    firstName: string;
-    lastName: string;
-    password: string;
-  }
   const [firstName, setFirstName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [userData, setUserData] = useState<Captain | null>(null);
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const [vehicleColor, setVehicleColor] = useState<string>("");
+  const [vehiclePlate, setVehiclePlate] = useState<string>("");
+  const [vehicleCapacity, setVehicleCapacity] = useState<number>(0);
+  const [vehicleType, setVehicleType] = useState<string | null>("");
+  const navigate = useNavigate();
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUserData({
-      firstName: firstName,
-      lastName: lastName,
-      password: password,
-    });
-    console.log(userData);
+    const captainData: CaptainSignUp = {
+      fullName: { firstName, lastName },
+      email,
+      password,
+      vehicle: { vehicleColor, vehiclePlate, vehicleCapacity, vehicleType },
+    };
+    const data = await captainSignUp(captainData);
+    localStorage.setItem("token", data.token);
+    navigate("/captain-home");
     //this allow access to the form element and in some cases edit the form element
   };
   return (
@@ -34,56 +43,102 @@ const CaptainSignup = () => {
         >
           <h3 className="my-2 text-xl font-bold"> Whats your name</h3>
           <div className="inline-flex justify-center items-start">
-            <input
-              type="name"
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-              value={firstName}
-              name="email"
-              placeholder="firstname"
-              className="bg-[#eeeeee] border rounded-xl mr-2 p-3 w-full placeholder:text-sm"
-            />
-            <input
-              type="name"
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-              value={lastName}
-              name="email"
-              placeholder="lastname"
-              className="bg-[#eeeeee] border rounded-xl p-3 w-full placeholder:text-sm"
-            />
+            {["firstname", "lastname"].map((placeholder, index) => (
+              <input
+                key={index}
+                type="text"
+                onChange={(e) =>
+                  index === 0
+                    ? setFirstName(e.target.value)
+                    : setLastName(e.target.value)
+                }
+                value={index === 0 ? firstName : lastName}
+                placeholder={placeholder}
+                className="form"
+                required
+              />
+            ))}
           </div>
           <h3 className="my-2 text-xl font-bold"> Whats your email</h3>
-          <input
-            type="email"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            value={email}
-            name="email"
-            placeholder="example@gmail.com"
-            className="bg-[#eeeeee] border rounded-xl p-3 w-full placeholder:text-sm"
-          />
-          <h3 className="text-xl my-2 font-bold"> Enter your password</h3>
-          <input
-            type="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            name="password"
-            value={password}
-            placeholder="password"
-            className="bg-[#eeeeee] p-3 border rounded-xl w-full mb-8 placeholder:"
-          />
+          {["email", "password"].map((input, index) => (
+            <input
+              key={index}
+              type={input}
+              onChange={(e) =>
+                index === 0
+                  ? setEmail(e.target.value)
+                  : setPassword(e.target.value)
+              }
+              value={index === 0 ? email : password}
+              name={index === 0 ? email : password}
+              placeholder={input}
+              required
+              className={`my-1 form ${index === 1 ? "mb-3" : ""}`}
+            />
+          ))}
+          <h3 className="my-2 text-xl font-bold">Vehicle information </h3>
+
+          <div className="inline-flex flex-row justify-center mb-2">
+            {["vehicle color", "vehicle plate"].map((input, index) => (
+              <input
+                className="form"
+                key={index}
+                required
+                type="text"
+                value={
+                  index === 0
+                    ? vehicleColor
+                    : index === 1
+                    ? vehiclePlate
+                    : vehicleType
+                }
+                placeholder={input}
+                name={
+                  index === 0
+                    ? vehicleColor
+                    : index === 1
+                    ? vehiclePlate
+                    : vehicleType
+                }
+                onChange={(e) =>
+                  index === 0
+                    ? setVehicleColor(e.target.value)
+                    : index === 1
+                    ? setVehiclePlate(e.target.value)
+                    : setVehicleCapacity(Number(e.target.value))
+                }
+              />
+            ))}
+          </div>
+          <div className="inline-flex flex-row justify-center mb-3 w-full">
+            <input
+              className="form"
+              type="number"
+              value={vehicleCapacity}
+              onChange={(e) => setVehicleCapacity(Number(e.target.value))}
+              placeholder="Vehicle capacity"
+              required
+            />
+            <select
+              value={vehicleType}
+              onChange={(e) => setVehicleType(e.target.value)}
+              className="form"
+            >
+              <option value="car">Car</option>
+              <option value="motercycle">bike</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
           <button className="w-full bg-black p-2 rounded-lg text-white font-bold text-lg">
-            Sign Up
+            Sign Up as Captain
           </button>
         </form>
         <p className="text-center pt-3 ">
           Already an account ?{" "}
-          <Link to="/captain-login" className="text-blue-800 hover:text-red-400">
+          <Link
+            to="/captain-login"
+            className="text-blue-800 hover:text-red-400"
+          >
             {" "}
             login here
           </Link>{" "}

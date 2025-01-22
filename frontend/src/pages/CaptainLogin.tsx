@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { captainSignIn } from "../apis/captain.api";
+export interface CaptainSignIn {
+  email: string;
+  password: string;
+}
 const CaptainLogin = () => {
-  interface captain {
-    name: string;
-    password: string;
-  }
-  const [email, setEmail] = useState<string>();
-  const [passowrd, setPassword] = useState<string>();
-  const [captin, setCaptain] = useState<captain<string>>({});
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     //this allow access to the form element and in some cases edit the form element
     e.preventDefault();
-  };
+    const captainData: CaptainSignIn = {
+      email,
+      password,
+    };
+    const data = await captainSignIn(captainData);
+    console.log(data);
+};
   return (
     <div className="p-7 h-screen flex flex-col justify-between">
       {" "}
@@ -31,8 +37,8 @@ const CaptainLogin = () => {
             }}
             value={email}
             name="email"
-            placeholder="exampl@gmail.com"
-            className="bg-[#eeeeee] border rounded-xl p-3 w-full placeholder:text-sm"
+            placeholder="example@gmail.com"
+            className="form placeholder:text-sm"
           />
           <h3 className="text-xl my-2 font-bold"> Enter your password</h3>
           <input
@@ -41,9 +47,9 @@ const CaptainLogin = () => {
               setPassword(e.target.value);
             }}
             name="password"
-            value={passowrd}
+            value={password}
             placeholder="password"
-            className="bg-[#eeeeee] p-3 border rounded-xl w-full mb-8 placeholder:"
+            className="form placeholder:text-sm mb-3"
           />
           <button className="w-full bg-black p-2 rounded-lg text-white font-bold text-lg">
             login
@@ -51,7 +57,10 @@ const CaptainLogin = () => {
         </form>
         <p className="text-center pt-3 ">
           new here ?{" "}
-          <Link to="/user-signup" className="text-blue-800 hover:text-red-400">
+          <Link
+            to="/captain-signup"
+            className="text-blue-800 hover:text-red-400"
+          >
             {" "}
             Register as captain
           </Link>{" "}

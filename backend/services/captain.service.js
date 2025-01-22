@@ -8,7 +8,6 @@ export const createCaptain = async ({
 
     if (!firstname || !lastname || !email || !password || !color || !plate || !capacity || !vehicleType) {
         throw new Error("All fields are required ");
-
     }
     const captain = await captainModel.create({
         fullname: {

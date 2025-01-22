@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer utilities {
+  .form {
+    @apply bg-slate-200  rounded-xl p-3 w-full placeholder:text-sm mr-2;
+  }
+}

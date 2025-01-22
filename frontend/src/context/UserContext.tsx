@@ -1,19 +1,16 @@
-import React, { createContext, useContext, useState } from "react";
-interface UserContextProps extends React.PropsWithChildren {
-  children: React.ReactNode;
-}
-interface User {
+import React, { createContext, ReactNode, useContext, useState } from "react";
+
+export interface User {
   email: string;
   fullname: { firstName: string; lastName: string };
 }
-interface UserDataContextType {
-  user: User;
+export interface UserDataContextType {
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
-export const UserDataContext = createContext<UserDataContextType | undefined>(
-  undefined
-);
+const UserDataContext = createContext<UserDataContextType | null>(null);
 
-export const UserContextProvider = ({ children }: UserContextProps) => {
+export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>({
     email: "",
     fullname: {
@@ -23,7 +20,7 @@ export const UserContextProvider = ({ children }: UserContextProps) => {
   });
   return (
     <div>
-      <UserDataContext.Provider value={[user, setUser]}>
+      <UserDataContext.Provider value={{ user, setUser }}>
         {children}
       </UserDataContext.Provider>
     </div>
