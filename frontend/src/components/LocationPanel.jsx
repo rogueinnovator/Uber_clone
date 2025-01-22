@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LocationPanel = () => {
+const LocationPanel = ({ setVehiclePanel }) => {
     return (
         <div>
             {[
@@ -13,7 +13,7 @@ const LocationPanel = () => {
                 <div key={index}>
                     <div className='flex justify-start items-center gap-2 text-xl pl-5 my-2 h-20'>
                         <i className="ri-map-pin-line bg-slate-100 p-2 rounded-full"></i>
-                        <h2 className='font-normal px-3'>{address}</h2>
+                        <h2 onClick={() => setVehiclePanel(true)} className='font-normal px-3'>{address}</h2>
                     </div>
                     <hr className='bg-slate-100' />
                 </div>

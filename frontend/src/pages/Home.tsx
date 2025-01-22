@@ -9,6 +9,8 @@ const Home = () => {
   const [destination, setDestination] = React.useState<string>("");
   const [picUpLocation, setPicUpLocation] = React.useState<string>("");
   const [isPanelOpen, setIsPanelOpen] = React.useState<boolean>(false);
+  const [vehiclePanel, setVehiclePanel] = React.useState<boolean>(false);
+  // const [isLocationPanel, setIsLocationPanel] = React.useState<boolean>(false);
   const panelRef = React.useRef<HTMLDivElement>(null);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     console.log(e);
@@ -78,66 +80,78 @@ const Home = () => {
             ))}
           </form>
         </div>
+
         <div ref={panelRef} className="h-[75%] bg-white ">
-          <LocationPanel />
+          <LocationPanel setVehiclePanel={setVehiclePanel} />
         </div>
       </div>
-      <div className="fixed z-10 bottom-0 rounded-xl w-full p-2 bg-white">
-        <h3 className="text-2xl font-bold my-5 pl-4"> Choose a Vehicle</h3>
-        {[
-          {
-            dataType: {
-              type: "Uber Go",
-              imageUrl:
-                "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1652995234/assets/92/8d4288-e896-4333-9bc2-c60c49f2a095/original/UberXL_Black_v2.png",
-            },
-            time: "2 min away",
-            price: "$193.20",
-            description: "Affordable compact,Rides",
-          },
-          {
-            dataType: {
-              type: "Uber Go",
-              imageUrl:
-                "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1712027307/assets/42/eb85c3-e2dc-4e95-a70d-22ee4f08015f/original/Screenshot-2024-04-01-at-9.08.07p.m..png",
-            },
-            time: "2 min away",
-            price: "$193.20",
-            description: "Affordable compact,Rides",
-          },
-          {
-            dataType: {
-              type: "Uber Go",
-              imageUrl:
-                "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648177797/assets/fc/ddecaa-2eee-48fe-87f0-614aa7cee7d3/original/Uber_Moto_312x208_pixels_Mobile.png",
-            },
-            time: "2 min away",
-            price: "$193.20",
-            description: "Affordable compact,Rides",
-          },
-        ].map((data, index) => (
-          <div
-            key={index}
-            className="flex justify-start items-start gap-2 border-2 border-black p-2 rounded-xl my-1"
+      {vehiclePanel && (
+        <div className="fixed z-10 bottom-0 rounded-xl w-full p-2 bg-white">
+          <h5
+            className="text-3xl font-light text-slate-800 absolute text-center top-0  right-1 w-full"
+            onClick={() => setVehiclePanel(false)}
           >
             {" "}
-            <img className="h-16" src={data.dataType.imageUrl} alt="data" />
-            <div className="w-1/2">
-              <h4 className="font-bold text-xl inline-flex justify-between items-center">
-                {data.dataType.type}{" "}
-                <span className="text-gray-500 text-sm">
-                  <i className="ri-user-fill px-2"> 4</i>
-                </span>
-              </h4>
-              <h5 className="inline-flex items-end font-medium">
-                {data.time} <span className="pl-2 text-sm">15:24</span>
-              </h5>
-              <h3 className="font-medium text-gray-600">{data.description} </h3>
+            <i className="ri-arrow-down-wide-fill"></i>
+          </h5>
+          <h3 className="text-2xl font-bold my-5 pl-4"> Choose a Vehicle</h3>
+          {[
+            {
+              dataType: {
+                type: "Uber Go",
+                imageUrl:
+                  "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1652995234/assets/92/8d4288-e896-4333-9bc2-c60c49f2a095/original/UberXL_Black_v2.png",
+              },
+              time: "2 min away",
+              price: "$193.20",
+              description: "Affordable compact,Rides",
+            },
+            {
+              dataType: {
+                type: "Uber Go",
+                imageUrl:
+                  "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1712027307/assets/42/eb85c3-e2dc-4e95-a70d-22ee4f08015f/original/Screenshot-2024-04-01-at-9.08.07p.m..png",
+              },
+              time: "2 min away",
+              price: "$193.20",
+              description: "Affordable compact,Rides",
+            },
+            {
+              dataType: {
+                type: "Uber Go",
+                imageUrl:
+                  "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648177797/assets/fc/ddecaa-2eee-48fe-87f0-614aa7cee7d3/original/Uber_Moto_312x208_pixels_Mobile.png",
+              },
+              time: "2 min away",
+              price: "$193.20",
+              description: "Affordable compact,Rides",
+            },
+          ].map((data, index) => (
+            <div
+              key={index}
+              className="flex justify-start items-start gap-2 border active:border-slate-950 border-slate-400 p-2 rounded-xl my-1"
+            >
+              {" "}
+              <img className="h-16" src={data.dataType.imageUrl} alt="data" />
+              <div className="w-1/2">
+                <h4 className="font-bold text-xl inline-flex justify-between items-center">
+                  {data.dataType.type}{" "}
+                  <span className="text-gray-500 text-sm">
+                    <i className="ri-user-fill px-2"> 4</i>
+                  </span>
+                </h4>
+                <h5 className="inline-flex items-end font-medium">
+                  {data.time} <span className="pl-2 text-sm">15:24</span>
+                </h5>
+                <h3 className="font-medium text-gray-600">
+                  {data.description}{" "}
+                </h3>
+              </div>
+              <h2 className="text-2xl font-semibold">{data.price}</h2>
             </div>
-            <h2 className="text-2xl font-semibold">{data.price}</h2>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
