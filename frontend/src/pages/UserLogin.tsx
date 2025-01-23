@@ -34,13 +34,14 @@ const UserLogin: React.FC = () => {
           }
         >
           <h3 className="my-2 text-xl font-bold">What's your email?</h3>
+
           <input
             type="email"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             name="email"
             placeholder="example@gmail.com"
-            className="bg-[#eeeeee] border rounded-xl p-3 w-full placeholder:text-sm"
+            className="form"
             required
           />
           <h3 className="text-xl my-2 font-bold">Enter your password</h3>
@@ -50,7 +51,7 @@ const UserLogin: React.FC = () => {
             value={password}
             name="password"
             placeholder="Password"
-            className="bg-[#eeeeee] p-3 border rounded-xl w-full mb-8 placeholder:text-sm"
+            className="form  mb-4"
             required
           />
           <button

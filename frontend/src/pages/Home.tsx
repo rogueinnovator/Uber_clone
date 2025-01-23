@@ -3,22 +3,59 @@ import { useUserContext } from "../context/UserContext";
 import { useGSAP } from "@gsap/react";
 import "remixicon/fonts/remixicon.css";
 import gsap from "gsap";
-import LocationPanel from "../components/LocationPanel";
+import VehicleComponent from "./../components/VehicleComponent";
+import LocationPanel from "../components/LocationPanel.tsx";
+import ConfirmedRide from "../components/ConfirmedRide.tsx";
 const Home = () => {
   const { user } = useUserContext();
-  const [destination, setDestination] = React.useState<string>("");
-  const [picUpLocation, setPicUpLocation] = React.useState<string>("");
-  const [isPanelOpen, setIsPanelOpen] = React.useState<boolean>(false);
-  const [vehiclePanel, setVehiclePanel] = React.useState<boolean>(false);
-  // const [isLocationPanel, setIsLocationPanel] = React.useState<boolean>(false);
-  const panelRef = React.useRef<HTMLDivElement>(null);
+  const [destination, setDestination] = useState<string>("");
+  const [picUpLocation, setPicUpLocation] = useState<string>("");
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
+  const [vehiclePanel, setVehiclePanel] = useState<boolean>(false);
+  const [confirmRide, setConfirmRide] = useState<boolean>(false);
+  const vehiclePanelRef = useRef<HTMLDivElement>(null);
+  const confirmRideRef = useRef<HTMLDivElement>(null);
+  const vehicleData = [
+    {
+      dataType: {
+        type: "Uber Go",
+        imageUrl:
+          "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1652995234/assets/92/8d4288-e896-4333-9bc2-c60c49f2a095/original/UberXL_Black_v2.png",
+      },
+      time: "2 min away",
+      price: "$193.20",
+      description: "Affordable compact,Rides",
+    },
+    {
+      dataType: {
+        type: "Uber Go",
+        imageUrl:
+          "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1712027307/assets/42/eb85c3-e2dc-4e95-a70d-22ee4f08015f/original/Screenshot-2024-04-01-at-9.08.07p.m..png",
+      },
+      time: "2 min away",
+      price: "$193.20",
+      description: "Affordable compact,Rides",
+    },
+    {
+      dataType: {
+        type: "Uber Go",
+        imageUrl:
+          "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648177797/assets/fc/ddecaa-2eee-48fe-87f0-614aa7cee7d3/original/Uber_Moto_312x208_pixels_Mobile.png",
+      },
+      time: "2 min away",
+      price: "$193.20",
+      description: "Affordable compact,Rides",
+    },
+  ];
+  const panelRef = useRef<HTMLDivElement>(null);
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     console.log(e);
   };
+  //LOGIC FOR PANEL
   useGSAP(() => {
     if (isPanelOpen) {
       gsap.to(panelRef.current, {
-        height: "70%",
+        height: "60%",
       });
     } else {
       gsap.to(panelRef.current, {
@@ -26,6 +63,32 @@ const Home = () => {
       });
     }
   }, [isPanelOpen]);
+  //LOGIC FOR VEHICLE PANEL
+  useGSAP(() => {
+    if (vehiclePanel) {
+      gsap.to(vehiclePanelRef.current, {
+        transform: "translateY(0)",
+      });
+    } else {
+      gsap.to(vehiclePanelRef.current, {
+        transform: "translateY(100%)",
+      });
+    }
+  }, [vehiclePanel, isPanelOpen]);
+  //LOGIC FOR CONFIRM RIDE
+  useGSAP(() => {
+    if (confirmRide) {
+      gsap.to(confirmRideRef.current, {
+        transform: "translateY(0)",
+      });
+    } else {
+      gsap.to(confirmRideRef.current, {
+        transform: "translateY(100%)",
+      });
+    }
+  }, [confirmRide]);
+  console.log(confirmRide);
+
   return (
     <div className="relative overflow-hidden">
       <img
@@ -82,77 +145,52 @@ const Home = () => {
         </div>
 
         <div ref={panelRef} className="h-[75%] bg-white ">
-          <LocationPanel setVehiclePanel={setVehiclePanel} />
+          <LocationPanel
+            setIsVehiclePanel={setVehiclePanel}
+            setIsPanelOpen={setIsPanelOpen}
+          />
         </div>
       </div>
-      {vehiclePanel && (
-        <div className="fixed z-10 bottom-0 rounded-xl w-full p-2 bg-white">
-          <h5
-            className="text-3xl font-light text-slate-800 absolute text-center top-0  right-1 w-full"
-            onClick={() => setVehiclePanel(false)}
-          >
-            {" "}
-            <i className="ri-arrow-down-wide-fill"></i>
-          </h5>
-          <h3 className="text-2xl font-bold my-5 pl-4"> Choose a Vehicle</h3>
-          {[
-            {
-              dataType: {
-                type: "Uber Go",
-                imageUrl:
-                  "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1652995234/assets/92/8d4288-e896-4333-9bc2-c60c49f2a095/original/UberXL_Black_v2.png",
-              },
-              time: "2 min away",
-              price: "$193.20",
-              description: "Affordable compact,Rides",
-            },
-            {
-              dataType: {
-                type: "Uber Go",
-                imageUrl:
-                  "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1712027307/assets/42/eb85c3-e2dc-4e95-a70d-22ee4f08015f/original/Screenshot-2024-04-01-at-9.08.07p.m..png",
-              },
-              time: "2 min away",
-              price: "$193.20",
-              description: "Affordable compact,Rides",
-            },
-            {
-              dataType: {
-                type: "Uber Go",
-                imageUrl:
-                  "https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1648177797/assets/fc/ddecaa-2eee-48fe-87f0-614aa7cee7d3/original/Uber_Moto_312x208_pixels_Mobile.png",
-              },
-              time: "2 min away",
-              price: "$193.20",
-              description: "Affordable compact,Rides",
-            },
-          ].map((data, index) => (
-            <div
-              key={index}
-              className="flex justify-start items-start gap-2 border active:border-slate-950 border-slate-400 p-2 rounded-xl my-1"
-            >
-              {" "}
-              <img className="h-16" src={data.dataType.imageUrl} alt="data" />
-              <div className="w-1/2">
-                <h4 className="font-bold text-xl inline-flex justify-between items-center">
-                  {data.dataType.type}{" "}
-                  <span className="text-gray-500 text-sm">
-                    <i className="ri-user-fill px-2"> 4</i>
-                  </span>
-                </h4>
-                <h5 className="inline-flex items-end font-medium">
-                  {data.time} <span className="pl-2 text-sm">15:24</span>
-                </h5>
-                <h3 className="font-medium text-gray-600">
-                  {data.description}{" "}
-                </h3>
-              </div>
-              <h2 className="text-2xl font-semibold">{data.price}</h2>
-            </div>
-          ))}
-        </div>
-      )}
+
+      <VehicleComponent
+        vehiclePanelRef={vehiclePanelRef}
+        setVehiclePanel={setVehiclePanel}
+        vehicleData={vehicleData}
+        setConfirmRide={setConfirmRide}
+      />
+      <ConfirmedRide
+        confirmRideRef={confirmRideRef}
+        setConfirmRide={setConfirmRide}
+        vehicleData={vehicleData}
+      />
     </div>
   );
 };
 export default Home;
+
+// function VehicleComponent.jsx({vehiclePanelRef, setVehiclePanel, data, index}) {
+//   return (<div ref={vehiclePanelRef} className="fixed z-10 bottom-0 rounded-xl w-full translate-y-full p-2 py-8 bg-white">
+//     <h5 className="text-3xl font-light text-slate-800 absolute text-center top-0  right-1 w-full" onClick={() => setVehiclePanel(false)}>
+//       {" "}
+//       <i className="ri-arrow-down-wide-fill"></i>
+//     </h5>
+//     <h3 className="text-2xl font-bold my-5 pl-4"> Choose a Vehicle</h3>
+//     {vehicleData.map((data, index) => <div key={index} className="flex justify-start items-start gap-2 border active:border-slate-950 border-slate-400 p-2 rounded-xl my-1">
+//         {" "}
+//         <img className="h-16" src={data.dataType.imageUrl} alt="data" />
+//         <div className="w-1/2">
+//           <h4 className="font-bold text-xl inline-flex justify-between items-center">
+//             {data.dataType.type}{" "}
+//             <span className="text-gray-500 text-sm">
+//               <i className="ri-user-fill px-2"> 4</i>
+//             </span>
+//           </h4>
+//           <h5 className="inline-flex items-end font-medium">
+//             {data.time} <span className="pl-2 text-sm">15:24</span>
+//           </h5>
+//           <h3 className="font-medium text-gray-600">{data.description} </h3>
+//         </div>
+//         <h2 className="text-2xl font-semibold">{data.price}</h2>
+//       </div>)}
+//   </div>);
+// }
