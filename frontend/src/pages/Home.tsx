@@ -6,6 +6,7 @@ import gsap from "gsap";
 import VehicleComponent from "./../components/VehicleComponent";
 import LocationPanel from "../components/LocationPanel.tsx";
 import ConfirmedRide from "../components/ConfirmedRide.tsx";
+import LookingForDriver from "../components/LookingForDriver.tsx";
 const Home = () => {
   const { user } = useUserContext();
   const [destination, setDestination] = useState<string>("");
@@ -13,8 +14,10 @@ const Home = () => {
   const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
   const [vehiclePanel, setVehiclePanel] = useState<boolean>(false);
   const [confirmRide, setConfirmRide] = useState<boolean>(false);
+  const [vehicleFound, setVehicleFound] = useState<boolean>(false);
   const vehiclePanelRef = useRef<HTMLDivElement>(null);
   const confirmRideRef = useRef<HTMLDivElement>(null);
+  const vehicleFoundRef = useRef<HTMLDivElement>(null);
   const vehicleData = [
     {
       dataType: {
@@ -51,7 +54,7 @@ const Home = () => {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     console.log(e);
   };
-  //LOGIC FOR PANEL
+  //ANIMATION FOR PANEL
   useGSAP(() => {
     if (isPanelOpen) {
       gsap.to(panelRef.current, {
@@ -63,7 +66,7 @@ const Home = () => {
       });
     }
   }, [isPanelOpen]);
-  //LOGIC FOR VEHICLE PANEL
+  //ANIMATION FOR VEHICLE PANEL
   useGSAP(() => {
     if (vehiclePanel) {
       gsap.to(vehiclePanelRef.current, {
@@ -75,19 +78,38 @@ const Home = () => {
       });
     }
   }, [vehiclePanel, isPanelOpen]);
-  //LOGIC FOR CONFIRM RIDE
+  // ANIMATION FOR CONFIRM RIDE
   useGSAP(() => {
     if (confirmRide) {
       gsap.to(confirmRideRef.current, {
         transform: "translateY(0)",
+        duration: 1.5,
+        ease: "power3.out",
       });
     } else {
       gsap.to(confirmRideRef.current, {
         transform: "translateY(100%)",
+        duration: 1.5,
+        ease: "power3.in",
       });
     }
   }, [confirmRide]);
-  console.log(confirmRide);
+  useGSAP(() => {
+    if (vehicleFound) {
+      gsap.to(vehicleFoundRef.current, {
+        transform: "translateY(0)",
+        duration: 1.5,
+        ease: "power1.in",
+      });
+    } else {
+      gsap.to(vehicleFoundRef.current, {
+        transform: "translateY(100)",
+        duration: 1.5,
+        ease: "power3.in",
+      });
+    }
+  });
+  console.log(vehicleFound);
 
   return (
     <div className="relative overflow-hidden">
@@ -122,8 +144,9 @@ const Home = () => {
           >
             {" "}
             <div className="line absolute h-16 w-1 bg-gray-800 rounded-full top-[44%] left-7 "></div>
-            {["destination", "picUpLocation"].map((value, index) => (
+            {["destination", "picUpLocation"].map((_, index) => (
               <input
+                key={index}
                 onClick={() => {
                   setIsPanelOpen(true);
                 }}
@@ -162,6 +185,11 @@ const Home = () => {
         confirmRideRef={confirmRideRef}
         setConfirmRide={setConfirmRide}
         vehicleData={vehicleData}
+        setVehicleFound={setVehicleFound}
+      />
+      <LookingForDriver
+        vehicleFoundRef={vehicleFoundRef}
+        setVehicleFound={setVehicleFound}
       />
     </div>
   );
