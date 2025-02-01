@@ -5,7 +5,7 @@ import "remixicon/fonts/remixicon.css";
 import gsap from "gsap";
 import VehicleComponent from "./../components/VehicleComponent";
 import LocationPanel from "../components/LocationPanel.tsx";
-import ConfirmedRide from "../components/ConfirmedRide.tsx";
+import ConfirmedRide from "../components/ConfirmRide.tsx";
 import LookingForDriver from "../components/LookingForDriver.tsx";
 const Home = () => {
   const { user } = useUserContext();
@@ -63,6 +63,7 @@ const Home = () => {
     } else {
       gsap.to(panelRef.current, {
         height: "0",
+        duration: 1.4,
       });
     }
   }, [isPanelOpen]);

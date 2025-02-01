@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { captainSignIn } from "../apis/captain.api";
 export interface CaptainSignIn {
   email: string;
   password: string;
 }
 const CaptainLogin = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,9 +16,9 @@ const CaptainLogin = () => {
       email,
       password,
     };
-    const data = await captainSignIn(captainData);
-    console.log(data);
-};
+    await captainSignIn(captainData);
+    navigate("/captain-home");
+  };
   return (
     <div className="p-7 h-screen flex flex-col justify-between">
       {" "}

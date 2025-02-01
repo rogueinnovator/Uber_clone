@@ -5,8 +5,8 @@ import { blackListTokenModel } from "../models/blackListToken.model.js";
 //1.REGISTER CAPTAIN
 export const registerCaptain = async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty) {
-        return res.status(400).json({ erros: errors.array() });
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
     const { fullName, email, password, vehicle } = req.body;
     const isCaptainExist = await captainModel.findOne({ email });
@@ -32,8 +32,8 @@ export const registerCaptain = async (req, res) => {
 //2.LOGIN CAPTAIN
 export const logInCaptain = async (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty) {
-        return res.status(400).json({ error: errors.array() });
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
     const { email, password } = req.body;
     const captain = await captainModel.findOne({ email }).select("+password");

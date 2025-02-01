@@ -17,8 +17,8 @@ router.post("/register",
     , registerCaptain
 );
 router.post("/login",
-    body("email").isEmail().withMessage("Enter a valid email"),
-    body("password").isLength({ min: 3 }).withMessage("The pass should be min 3 char "),
+    [body("email").isEmail().withMessage("Enter a valid email"),
+    body("password").isLength({ min: 3 }).withMessage("The pass should be min 3 char ")],
     logInCaptain
 );
 router.get("/profile", authCaptain, getCaptainProfile);
