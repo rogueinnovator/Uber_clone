@@ -2,13 +2,13 @@ import React, { SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import OTP from "./OTP";
 interface Props {
-  confirmRideRef: React.RefObject<HTMLDivElement>;
-  setRidePopUp: React.Dispatch<SetStateAction<boolean>>;
+  setFinishRide: React.Dispatch<SetStateAction<boolean>>;
+  finishRideRef: React.RefObject<HTMLDivElement>;
 }
 const FinishRide: React.FC<Props> = (props) => {
   return (
     <div
-      ref={props.confirmRideRef}
+      ref={props.finishRideRef}
       className="fixed z-10 bottom-0 rounded-xl w-full translate-y-full p-2 py-8 bg-white h-screen"
     >
       <h5
@@ -62,15 +62,13 @@ const FinishRide: React.FC<Props> = (props) => {
         </div>
       </div>
       <div className="fixed flex flex-col justify-center items-center bottom-5 left-1/2 transform -translate-x-1/2">
-        <OTP />
         <button
           onClick={() => {
-            props.setRidePopUp(false);
-            props.setRidePopUp(false);
+            props.setFinishRide(false);
           }}
-          className=" bg-red-600 py-3 rounded-xl text-white font-semibold px-28"
+          className=" bg-green-600 py-3 rounded-xl text-white font-semibold px-28"
         >
-          Cancel
+          Complete
         </button>
       </div>
     </div>

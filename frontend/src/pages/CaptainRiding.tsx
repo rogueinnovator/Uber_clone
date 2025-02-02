@@ -1,22 +1,23 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import ConfirmedRide from "../components/ConfirmRide";
+import ConfirmedRide from "../components/ConfirmedRide";
 import FinishRide from "../components/FinishRide";
 import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 const CaptainRiding = () => {
-  // const [finishRide, setFinishRide] = useState<boolean>(false);
-  // const finishRideRef = useRef<HTMLDivElement>(null);
-  // useGSAP(() => {
-  //   if (finishRide) {
-  //     gsap.to(finishRideRef.current, {
-  //       transform: "translateY(0)",
-  //     });
-  //   } else {
-  //     gsap.to(finishRideRef.current, {
-  //       transform: "translateY(100%)",
-  //     });
-  //   }
-  // }, [finishRide]);
+  const [finishRide, setFinishRide] = useState<boolean>(false);
+  const finishRideRef = useRef<HTMLDivElement>(null);
+  useGSAP(() => {
+    if (finishRide) {
+      gsap.to(finishRideRef.current, {
+        transform: "translateY(0)",
+      });
+    } else {
+      gsap.to(finishRideRef.current, {
+        transform: "translateY(100%)",
+      });
+    }
+  }, [finishRide]);
   return (
     <div className="h-screen">
       <div className="fixed w-full flex justify-between items-center rounded-full mt-1">
@@ -38,11 +39,17 @@ const CaptainRiding = () => {
         </h1>
         <div className="flex flex-row  items-center gap-32">
           <h1 className="text-2xl font-bold">4km</h1>
-          <button className="px-5 bg-green-400 rounded-xl text-xl py-2 text-white">
+          <button
+            onClick={() => setFinishRide(true)}
+            className="px-5 bg-green-400 rounded-xl text-xl py-2 text-white"
+          >
             Complete Ride
           </button>
         </div>
-        {/* <FinishRide setFinishRide={setFinishRide} /> */}
+        <FinishRide
+          setFinishRide={setFinishRide}
+          finishRideRef={finishRideRef}
+        />
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ import "remixicon/fonts/remixicon.css";
 import gsap from "gsap";
 import VehicleComponent from "./../components/VehicleComponent";
 import LocationPanel from "../components/LocationPanel.tsx";
-import ConfirmedRide from "../components/ConfirmRide.tsx";
 import LookingForDriver from "../components/LookingForDriver.tsx";
 const Home = () => {
   const { user } = useUserContext();

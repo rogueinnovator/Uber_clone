@@ -1,24 +1,44 @@
-## USER SIGNUP
+# UberClone
 
-This section allows new users to create an account. Users need to provide their email, password, and other required details to sign up.
+## User Signup
+New users can create an account by providing their email, password, and other required details. This process ensures a smooth onboarding experience.
 
-![User Signup Screenshot](<Screenshot From 2025-01-21 14-33-02.png>)
+### Screenshot:
+![User Signup](SS/Screenshot%20From%202025-01-21%2014-33-02.png)
 
-## USER LOGIN
+---
 
-Existing users can log in using their email and password. This section ensures secure access to user accounts.
+## User Login
+Existing users can securely log in using their email and password. This section provides authenticated access to the platform.
 
-![User Login Screenshot](<Screenshot From 2025-01-21 14-33-20.png>)
+### Screenshot:
+![User Login](SS/Screenshot%20From%202025-01-21%2014-33-20.png)
 
-## CAPTAIN SIGNIN
+---
 
-Captains can sign in to their accounts using their credentials. This section is for drivers who are part of the service.
+## Captain Sign-In
+Captains (drivers) can log in to their accounts using their credentials to start accepting ride requests.
 
-![Captain Signin Screenshot](<Screenshot From 2025-01-21 14-33-28.png>)
+### Screenshot:
+![Captain Sign-In](SS/Screenshot%20From%202025-01-21%2014-33-28.png)
 
-## CAPTAIN SIGNUP
+---
 
-New captains can sign up to join the service. They need to provide necessary details such as driving license, vehicle information, and other required documents.
+## Captain Signup
+New captains can register to join the service by submitting necessary details such as their driving license, vehicle information, and required documents.
 
-![Captain Signup Screenshot](<Screenshot From 2025-01-21 14-33-43.png>)
+### Screenshot:
+![Captain Signup](SS/Screenshot%20From%202025-01-21%2014-33-43.png)
+
+---
+
+## Additional Screenshots
+### Captain Home
+![Captain Home](SS/captain_home.png)
+
+### New Ride Request
+![New Ride](SS/new_ride.png)
+
+### Ride Confirmation
+![Confirm Ride](SS/confirm_ride.png)
 
